@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour {
     float moveSpeed = .1f;
     float rotateSpeed = 100f;
 
+    float sprintMultiplier = 1.75f;
+
 	// Use this for initialization
 	void Start () {
         cc = GetComponent<CharacterController>();
@@ -26,13 +28,20 @@ public class PlayerMovement : MonoBehaviour {
 	void Update () {
         movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         movement *= moveSpeed;
+
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0)
+        {
+            movement.z *= sprintMultiplier;
+        }
+
         movement = transform.TransformDirection(movement);
+
+        movement += Physics.gravity;
     }
 
     private void FixedUpdate()
     {
         cc.Move(movement);
-        cc.SimpleMove(Physics.gravity);
 
         transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed * Time.deltaTime, 0);
         Camera.main.transform.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed * Time.deltaTime * -1, 0, 0);
