@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
-    
     CharacterController cc;
     Transform tf;
 
@@ -21,7 +20,6 @@ public class PlayerMovement : MonoBehaviour {
         cc = GetComponent<CharacterController>();
         tf = GetComponent<Transform>();
 
-        
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 	}
@@ -35,7 +33,6 @@ public class PlayerMovement : MonoBehaviour {
         {
             movement.z *= sprintMultiplier;
         }
-        
 
         movement = transform.TransformDirection(movement);
 
