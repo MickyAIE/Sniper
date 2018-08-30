@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour {
     bool isCrouching = false;
     bool isProne = false;
 
+    [SerializeField] GameObject Climbable;
+    
 	// Use this for initialization
 	void Start () {
         cc = GetComponent<CharacterController>();
@@ -42,29 +44,47 @@ public class PlayerMovement : MonoBehaviour {
         }
 
 
-        if (Input.GetKey(KeyCode.C) && !isProne) //Crouch Input
+        if (Input.GetKey(KeyCode.C)) //Crouch Input
         {
             isCrouching = true;
-            tf.localScale = new Vector3(tf.localScale.x, .4f, tf.localScale.z);
+            tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(tf.localScale.x, .6f, tf.localScale.z), .3f);
             movement *= crouchSpeedMultiplier;
         }
+        else
+        {
+            isCrouching = false;
+        }
+
         if (Input.GetKey(KeyCode.X)) //Prone Input
         {
             isProne = true;
-            tf.localScale = new Vector3(tf.localScale.x, .2f, tf.localScale.z);
+            tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(tf.localScale.x, .2f, tf.localScale.z), .1f);
             movement *= proneSpeedMultiplier;
         }
         else
         {
             isProne = false;
+        }
+
+        if (!isProne && !isCrouching)
+        {
+            isProne = false;
             isCrouching = false;
-            tf.localScale = new Vector3(1f, 1f, 1f);
+            tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(1, 1, 1), .5f);
+        }
+
+
+        if (Climbable != null)
+        {
+            movement += -Physics.gravity * .01f;
+        }
+        else
+        {
+            movement += Physics.gravity * .03f;
         }
 
         //Movement
         movement = transform.TransformDirection(movement);
-        movement += Physics.gravity;
-        
     }
 
     private void FixedUpdate()
@@ -73,7 +93,22 @@ public class PlayerMovement : MonoBehaviour {
         cc.Move(movement);
 
         //Camera Rotation
-        transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed * Time.deltaTime, 0);
+        this.gameObject.transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed * Time.deltaTime, 0);
         Camera.main.transform.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed * Time.deltaTime * -1, 0, 0);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Climbable")
+        {
+            Climbable = other.gameObject;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other == Climbable)
+        Climbable = null;
+    }
+    
 }
