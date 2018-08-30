@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour {
         }
 
 
-        if (Climbable != null)
+        if (Climbable != null && Input.GetKey(KeyCode.W) && !isProne && !isCrouching)
         {
             movement += -Physics.gravity * .01f;
         }
@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void OnTriggerExit(Collider other)
     {
-        if(other == Climbable)
+        if(other.gameObject.tag == "Climbable")
         Climbable = null;
     }
     
