@@ -6,11 +6,11 @@ public class PlayerMovement : MonoBehaviour {
 
     CharacterController cc;
     Transform tf;
+    Animator pa;
 
     Vector3 movement = Vector3.zero;
-    Vector3 rotation = Vector3.zero;
 
-    float moveSpeed = .1f;
+    float moveSpeed = 1f;
     float rotateSpeed = 100f;
 
     float sprintMultiplier = 1.75f;
@@ -19,13 +19,18 @@ public class PlayerMovement : MonoBehaviour {
 
     bool isCrouching = false;
     bool isProne = false;
+    bool isClimbing = false;
 
-    [SerializeField] GameObject Climbable;
+    GameObject Climbable;
+    GameObject Clamberable;
+    
+    public GameObject ClamberDestination;
     
 	// Use this for initialization
 	void Start () {
         cc = GetComponent<CharacterController>();
         tf = GetComponent<Transform>();
+        pa = GetComponent<Animator>();
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -33,18 +38,75 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //Walking Input
-        movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        movement *= moveSpeed;
+        //Walking
+        Walking();
 
         //Sprinting
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0 && !isCrouching && !isProne)
+        Sprinting();
+
+        //Crouching and proning
+        CrouchAndProne();
+
+        //Climbing and falling
+        ClimbingAndGravity();
+
+        //Clambering
+        //Clambering();
+
+        //Movement
+        movement = transform.TransformDirection(movement);
+        movement *= Time.deltaTime;
+    }
+
+    private void FixedUpdate()
+    {
+        //Movement Input
+        cc.Move(movement);
+
+        //Camera Rotation
+        this.gameObject.transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed * Time.deltaTime, 0);
+        Camera.main.transform.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed * Time.deltaTime * -1, 0, 0);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Climbable")
+            Climbable = other.gameObject;
+
+        //if (other.gameObject.tag == "Clamberable")
+        //    Clamberable = other.gameObject;
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Climbable")
+            Climbable = null;
+
+        //if (other.gameObject.tag == "Clamberable")
+        //    Clamberable = null;
+    }
+
+    private void Walking()
+    {
+        if (!isClimbing)
+        {
+            movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            movement *= moveSpeed;
+        }
+    }
+
+    private void Sprinting()
+    {
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0 && !isCrouching && !isProne && !isClimbing)
         {
             movement.z *= sprintMultiplier;
         }
+    }
 
-
-        if (Input.GetKey(KeyCode.C)) //Crouch Input
+    private void CrouchAndProne()
+    {
+        if (Input.GetKey(KeyCode.C) && !isClimbing) //Crouch Input
         {
             isCrouching = true;
             tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(tf.localScale.x, .6f, tf.localScale.z), .3f);
@@ -55,7 +117,7 @@ public class PlayerMovement : MonoBehaviour {
             isCrouching = false;
         }
 
-        if (Input.GetKey(KeyCode.X)) //Prone Input
+        if (Input.GetKey(KeyCode.X) && !isClimbing) //Prone Input
         {
             isProne = true;
             tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(tf.localScale.x, .2f, tf.localScale.z), .1f);
@@ -72,43 +134,43 @@ public class PlayerMovement : MonoBehaviour {
             isCrouching = false;
             tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(1, 1, 1), .5f);
         }
+    }
 
-
-        if (Climbable != null && Input.GetKey(KeyCode.W) && !isProne && !isCrouching)
+    private void ClimbingAndGravity()
+    {
+        if(Climbable != null && Input.GetKeyDown(KeyCode.E))
         {
-            movement += -Physics.gravity * .01f;
+            isClimbing = !isClimbing;
+        }
+
+        if (Climbable != null && isClimbing == true)
+        {
+            if (Input.GetKey(KeyCode.W) && !isProne && !isCrouching)
+            {
+                movement += -Physics.gravity * .5f;
+
+            }
+            else if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.S) && !isProne && !isCrouching))
+            {
+                movement += Physics.gravity * .5f;
+            }
+            else
+            {
+                movement += Physics.gravity * 0f;
+            }
         }
         else
         {
-            movement += Physics.gravity * .03f;
+            movement += Physics.gravity * 1f;
+            isClimbing = false;
         }
-
-        //Movement
-        movement = transform.TransformDirection(movement);
     }
 
-    private void FixedUpdate()
+    private void Clambering()
     {
-        //Movement Input
-        cc.Move(movement);
-
-        //Camera Rotation
-        this.gameObject.transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed * Time.deltaTime, 0);
-        Camera.main.transform.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed * Time.deltaTime * -1, 0, 0);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Climbable")
+        if (Clamberable != null && Input.GetKeyDown(KeyCode.Space))
         {
-            Climbable = other.gameObject;
+            tf.position = Vector3.Lerp(tf.position, ClamberDestination.transform.position, 1f);
         }
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.gameObject.tag == "Climbable")
-        Climbable = null;
-    }
-    
 }
