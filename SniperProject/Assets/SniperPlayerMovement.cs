@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SniperPlayerMovement : MonoBehaviour {
+public class SniperPlayerMovement : MonoBehaviour
+{
 
     CharacterController cc;
     Transform tf;
@@ -23,21 +24,23 @@ public class SniperPlayerMovement : MonoBehaviour {
 
     GameObject Climbable;
     GameObject Clamberable;
-    
+
     public GameObject ClamberDestination;
-    
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start()
+    {
         cc = GetComponent<CharacterController>();
         tf = GetComponent<Transform>();
         pa = GetComponent<Animator>();
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         //Walking
         Walking();
 
@@ -50,6 +53,11 @@ public class SniperPlayerMovement : MonoBehaviour {
         //Climbing and falling
         ClimbingAndGravity();
 
+        //Shooting
+        if (Input.GetMouseButton(0))
+        {
+            Shooting();
+        }
         //Clambering
         //Clambering();
 
@@ -138,7 +146,7 @@ public class SniperPlayerMovement : MonoBehaviour {
 
     private void ClimbingAndGravity()
     {
-        if(Climbable != null && Input.GetKeyDown(KeyCode.E))
+        if (Climbable != null && Input.GetKeyDown(KeyCode.E))
         {
             isClimbing = !isClimbing;
         }
@@ -171,6 +179,17 @@ public class SniperPlayerMovement : MonoBehaviour {
         if (Clamberable != null && Input.GetKeyDown(KeyCode.Space))
         {
             tf.position = Vector3.Lerp(tf.position, ClamberDestination.transform.position, 1f);
+        }
+    }
+
+    private void Shooting()
+    {
+        Ray rayOrigin = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
+        //RaycastHit hitInfo;
+
+        if (Physics.Raycast(rayOrigin, Mathf.Infinity))
+        {
+            Debug.Log("Hit: Anything");
         }
     }
 }

@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour {
     CharacterController cc;
     Transform tf;
 
+    AudioSource _audio;
+
     Vector3 movement = Vector3.zero;
     Vector3 rotation = Vector3.zero;
 
@@ -29,6 +31,8 @@ public class PlayerMovement : MonoBehaviour {
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        _audio = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -41,6 +45,12 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") > 0 && !isCrouching && !isProne)
         {
             movement.z *= sprintMultiplier;
+        }
+
+        //Shooting
+        if (Input.GetMouseButtonDown(0))
+        {
+            Shooting();
         }
 
 
@@ -110,5 +120,17 @@ public class PlayerMovement : MonoBehaviour {
         if(other.gameObject.tag == "Climbable")
         Climbable = null;
     }
-    
+
+    private void Shooting()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo))
+        {
+            Debug.Log("Hit: " +  hitInfo.transform.name);
+            _audio.Play();
+        }
+    }
+
 }
