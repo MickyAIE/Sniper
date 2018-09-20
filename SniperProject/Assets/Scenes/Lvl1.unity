@@ -801,8 +801,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -268.5, y: 49.35}
-  m_SizeDelta: {x: 537, y: 98.7}
+  m_AnchoredPosition: {x: -247.5, y: 49.35}
+  m_SizeDelta: {x: 495, y: 98.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &521406997
 MonoBehaviour:
@@ -922,7 +922,6 @@ MonoBehaviour:
   m_TimerText: {fileID: 1927360157}
   fpsText: {fileID: 946038840}
   m_HighScoresText: {fileID: 1537432206}
-  HUDStuff: {fileID: 1258234959}
   m_HighScorePanel: {fileID: 1301358325}
   m_NewGameButton: {fileID: 2035614362}
   m_HighScoresButton: {fileID: 1235780322}
@@ -3949,8 +3948,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -226.5, y: -49.350006}
-  m_SizeDelta: {x: 537, y: 98.7}
+  m_AnchoredPosition: {x: -247.5, y: -49.350006}
+  m_SizeDelta: {x: 495, y: 98.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1955564323
 MonoBehaviour:
