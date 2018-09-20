@@ -190,10 +190,11 @@ public class GameManager : MonoBehaviour
                     m_GameState = GameState.Playing;
                     m_MessageText.text = "";
                     m_TimerText.gameObject.SetActive(true);
+                    
 
                     for (int i = 0; i < m_Characters.Length; i++)
                     {
-                        m_Characters[i].SetActive(true);
+                        m_Characters[i].SetActive(false);
                     }
                 }
                 break;
