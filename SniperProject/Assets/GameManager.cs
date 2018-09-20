@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
 
                     for (int i = 0; i < m_Characters.Length; i++)
                     {
-                        m_Characters[i].SetActive(false);
+                        m_Characters[i].SetActive(true);
                     }
                 }
                 break;
