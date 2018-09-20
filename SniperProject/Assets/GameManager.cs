@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public Text fpsText;
     public Text m_HighScoresText;
 
-    public GameObject HUDStuff;
+    
     public GameObject m_HighScorePanel;
     public Button m_NewGameButton;
     public Button m_HighScoresButton;
@@ -152,21 +152,8 @@ public class GameManager : MonoBehaviour
                 int seconds = Mathf.RoundToInt(m_gameTime);
                 m_TimerText.text = string.Format("{0:D2}:{1:D2}",
                             (seconds / 60), (seconds % 60));
-                /*
-                ????? Not Key component, just to test if high
-                scores are working, Confused, ask Sir At Some 
-                Point cause its not working
-                if (Input.GetButtonDown(KeyCode.Y))
-                {
-                    m_HighScores.AddScore(Mathf.RoundToInt(GameTime));
-                    m_HighScores.SaveScoresToFile();
-                }
-                */
-                if (Input.GetKeyDown(KeyCode.Escape) == true)
-                {
-                    HUDStuff.SetActive(false);
 
-                }
+
                 if (OneTankLeft() == true)
                 {
                     isGameOver = true;
@@ -211,9 +198,6 @@ public class GameManager : MonoBehaviour
                 }
                 break;
         }
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
+
     }
 }
