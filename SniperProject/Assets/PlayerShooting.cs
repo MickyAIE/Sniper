@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TankShooting : MonoBehaviour
+public class PlayerShooting : MonoBehaviour
 {
     public Rigidbody m_Shell;
     public Transform m_FireTransform;
