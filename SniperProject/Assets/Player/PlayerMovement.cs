@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKey(KeyCode.C)) //Crouch Input
         {
             isCrouching = true;
-            tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(tf.localScale.x, .6f, tf.localScale.z), .3f);
+            tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(tf.localScale.x, .6f * 4.5f, tf.localScale.z), .3f);
             movement *= crouchSpeedMultiplier;
         }
         else
@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKey(KeyCode.X)) //Prone Input
         {
             isProne = true;
-            tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(tf.localScale.x, .2f, tf.localScale.z), .1f);
+            tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(tf.localScale.x, .2f * 4.5f, tf.localScale.z), .1f);
             movement *= proneSpeedMultiplier;
         }
         else
@@ -80,7 +80,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             isProne = false;
             isCrouching = false;
-            tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(1, 1, 1), .5f);
+            tf.localScale = Vector3.Lerp(tf.localScale, new Vector3(4.5f, 4.5f, 4.5f), .5f);
         }
 
 
