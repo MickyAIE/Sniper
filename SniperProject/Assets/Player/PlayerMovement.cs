@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour {
     float moveSpeed = .1f;
     float rotateSpeed = 100f;
 
-    float sprintMultiplier = 1.75f;
+    float sprintMultiplier = 3.50f;
     float crouchSpeedMultiplier = .5f;
     float proneSpeedMultiplier = .1f;
 
