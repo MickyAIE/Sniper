@@ -106,7 +106,7 @@ public class Bot : MonoBehaviour {
             allWayPoints[i + 1] = path.corners[i];
         }
 
-        nav.SetDestination(path.corners[1]);
+       // nav.SetDestination(path.corners[1]);
     }
 
     public bool isPlayer()
@@ -142,7 +142,7 @@ public class Bot : MonoBehaviour {
                 {
                     StartCoroutine(NextShot());
                     canShoot = false;
-                    rhit.collider.gameObject.SendMessage("hit", 5F);
+                    rhit.collider.gameObject.SendMessage("TakeDamage", 10);
                     Debug.Log("Hit");
                 }
                 else
