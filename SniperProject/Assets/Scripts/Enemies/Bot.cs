@@ -143,6 +143,7 @@ public class Bot : MonoBehaviour {
                     StartCoroutine(NextShot());
                     canShoot = false;
                     rhit.collider.gameObject.SendMessage("hit", 5F);
+                    Debug.Log("Hit");
                 }
                 else
                 {

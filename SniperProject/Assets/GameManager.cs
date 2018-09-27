@@ -152,13 +152,13 @@ public class GameManager : MonoBehaviour
                 int seconds = Mathf.RoundToInt(m_gameTime);
                 m_TimerText.text = string.Format("{0:D2}:{1:D2}",
                             (seconds / 60), (seconds % 60));
-
+        
 
                 if (OneTankLeft() == true)
                 {
                     isGameOver = true;
                 }
-                else if (IsPlayerDead() == true)
+                if (IsPlayerDead() == true)
                 {
                     isGameOver = true;
                 }

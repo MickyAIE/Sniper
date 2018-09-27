@@ -7,7 +7,11 @@ public class PlayerMovement : MonoBehaviour {
     CharacterController cc;
     Transform tf;
 
+    private GameObject enemy;
+
     AudioSource _audio;
+
+    CharHealth _charH;
 
     Vector3 movement = Vector3.zero;
     Vector3 rotation = Vector3.zero;
@@ -28,9 +32,11 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
         cc = GetComponent<CharacterController>();
         tf = GetComponent<Transform>();
-
+        _charH = GetComponent<CharHealth>();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        enemy = GameObject.FindWithTag("Enemy");
 
         _audio = GetComponent<AudioSource>();
 	}
@@ -50,7 +56,9 @@ public class PlayerMovement : MonoBehaviour {
         //Shooting
         if (Input.GetMouseButtonDown(0))
         {
+            _audio.Play();
             Shooting();
+            
         }
 
 
@@ -121,15 +129,22 @@ public class PlayerMovement : MonoBehaviour {
         Climbable = null;
     }
 
+    float maxRange = 150;
+
     private void Shooting()
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(ray, out hitInfo))
+        
+
+        if (Physics.Raycast(ray, out hitInfo, maxRange))
         {
-            Debug.Log("Hit: " +  hitInfo.transform.name);
-            _audio.Play();
+            if (hitInfo.collider.gameObject.tag == "Enemy")
+            {
+                _charH.TakeDamage(10);
+                Debug.Log("ENEMY HIT");
+            }
         }
     }
 

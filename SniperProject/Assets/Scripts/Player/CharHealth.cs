@@ -6,7 +6,7 @@ public class CharHealth : MonoBehaviour
 {
     public float m_startinghealth = 100f; // setting the amount of health the tanks start with
     
-
+    [SerializeField]
     private float m_CurrentHealth;
     private bool m_Dead;
 
