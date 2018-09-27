@@ -7,9 +7,12 @@ public class PlayerMovement : MonoBehaviour {
     CharacterController cc;
     Transform tf;
 
-    private GameObject enemy;
+    [SerializeField]
+    private GameObject enemyGeneral;
 
     AudioSource _audio;
+
+    
 
     CharHealth _charH;
 
@@ -22,7 +25,7 @@ public class PlayerMovement : MonoBehaviour {
     float sprintMultiplier = 4.50f;
     float crouchSpeedMultiplier = .5f;
     float proneSpeedMultiplier = .1f;
-
+    Bot _enemyHealth;
     bool isCrouching = false;
     bool isProne = false;
 
@@ -36,13 +39,18 @@ public class PlayerMovement : MonoBehaviour {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        enemy = GameObject.FindWithTag("Enemy");
+        
 
         _audio = GetComponent<AudioSource>();
-	}
+        _enemyHealth = GameObject.Find("General").GetComponent<Bot>();
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
+
+        
+
         //Walking Input
         movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         movement *= moveSpeed;
@@ -130,20 +138,21 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     float maxRange = 150;
-
+    float damage = 100;
     private void Shooting()
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
         RaycastHit hitInfo;
 
-        
-
         if (Physics.Raycast(ray, out hitInfo, maxRange))
         {
             if (hitInfo.collider.gameObject.tag == "Enemy")
             {
-                _charH.TakeDamage(10);
-                Debug.Log("ENEMY HIT");
+                     
+                    _enemyHealth.GetComponent<Bot>().health -= 10f;
+
+                    Debug.Log("ENEMY HIT");
+                
             }
         }
     }

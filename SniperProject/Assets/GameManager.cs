@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
     public Text fpsText;
     public Text m_HighScoresText;
 
-    
+    public GameObject enemyGeneral;
+
     public GameObject m_HighScorePanel;
     public Button m_NewGameButton;
     public Button m_HighScoresButton;
@@ -37,7 +38,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Application.targetFrameRate = 300;
+        Application.targetFrameRate = 60;
         m_GameState = GameState.Start;
     }
 
@@ -46,6 +47,7 @@ public class GameManager : MonoBehaviour
         int numTanksLeft = 0;
         for (int i = 0; i < m_Characters.Length; i++)
         {
+            
             if (m_Characters[i].activeSelf == true)
             {
                 numTanksLeft++;
@@ -60,12 +62,28 @@ public class GameManager : MonoBehaviour
         {
             if (m_Characters[i].activeSelf == false)
             {
-                if (m_Characters[i].tag == "player")
+                if (m_Characters[i].tag == "Player")
                     return true;
             }
         }
         return false;
     }
+
+    private bool IsEnemyDead()
+    {
+        for (int i = 0; i < m_Characters.Length; i++)
+        {
+            if (m_Characters[i].activeSelf == false)
+            {
+                if (m_Characters[i].tag == "Enemy")
+                    enemyGeneral.gameObject.SetActive(false);
+                    return true;
+            }
+        }
+        return false;
+    }
+
+   
 
 
     private void Start()
@@ -80,6 +98,8 @@ public class GameManager : MonoBehaviour
         m_HighScorePanel.gameObject.SetActive(false);
         m_NewGameButton.gameObject.SetActive(false);
         m_HighScoresButton.gameObject.SetActive(false);
+
+        
     }
 
     public void OnNewGame()
@@ -92,10 +112,13 @@ public class GameManager : MonoBehaviour
         m_GameState = GameState.Playing;
         m_TimerText.gameObject.SetActive(true);
         m_MessageText.text = "";
-
+        
         for (int i = 0; i < m_Characters.Length; i++)
         {
-            m_Characters[i].SetActive(true);
+            if (m_Characters[1] != null)
+            {
+                m_Characters[i].SetActive(true);
+            }
         }
     }
 
@@ -162,11 +185,16 @@ public class GameManager : MonoBehaviour
                 {
                     isGameOver = true;
                 }
-                if (isGameOver == true)
+                if (IsEnemyDead() == true)
+                {
+                     
+                    isGameOver = true;
+                }
+                if (isGameOver == true && m_Characters[1] != null)
                 {
                     m_GameState = GameState.GameOver;
                     m_TimerText.gameObject.SetActive(false);
-
+                    
                     m_NewGameButton.gameObject.SetActive(true);
                     m_HighScoresButton.gameObject.SetActive(true);
 
@@ -174,7 +202,7 @@ public class GameManager : MonoBehaviour
                     {
                         m_MessageText.text = "MISSION FAILED, YOU'LL GET 'EM NEXT TIME";
                     }
-                    else
+                    else if(IsEnemyDead() == true)
                     {
                         m_MessageText.text = "YOU HAVE ELIMINATED THE TAGERT!";
                         // The last section of code is going to save the highscore
