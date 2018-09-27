@@ -17,6 +17,13 @@ public class Bot : MonoBehaviour {
     public float AlertDistance = 10f;
     private NavMeshAgent nav;
 
+
+    public bool isDead = false;
+
+    AudioSource _audio;
+
+    CharHealth _charH;
+
     public List<Transform> waypoints = new List<Transform>();
     int waypointCounter = 0;
 
@@ -24,6 +31,8 @@ public class Bot : MonoBehaviour {
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        _audio = GetComponent<AudioSource>();
+        _charH = player.GetComponent<CharHealth>();
         nav = GetComponent<NavMeshAgent>();
     }
 
@@ -32,7 +41,8 @@ public class Bot : MonoBehaviour {
     {
         if (health <= 0)
         {
-            StartCoroutine(Death());
+           Death();
+            this.gameObject.SetActive(false);
         }
         shoot();
         Alert();
@@ -72,6 +82,7 @@ public class Bot : MonoBehaviour {
                 {
                     bAlert = true;
                     AlertTime = 0;
+
                 }
                 else
                 {
@@ -140,6 +151,7 @@ public class Bot : MonoBehaviour {
             {
                 if (isPlayer())
                 {
+                    _audio.Play();
                     StartCoroutine(NextShot());
                     canShoot = false;
                     rhit.collider.gameObject.SendMessage("TakeDamage", 10);
@@ -163,17 +175,25 @@ public class Bot : MonoBehaviour {
     {
         shoot();
         bAlert = true;
-        health -= damage;
-        GetComponent<AudioSource>().PlayOneShot(pain);
+        if (this.gameObject != null)
+        {
+            health -= damage;
+            GetComponent<AudioSource>().PlayOneShot(pain);
+        }
     }
 
-    IEnumerator Death()
+    void Death()
     {
-        nav.isStopped = true;
-        canShoot = false;
-        yield return new WaitForSeconds(3F);
+        if (this.gameObject != null)
+        {
+            nav.isStopped = true;
+            canShoot = false;
 
-        Destroy(gameObject);
+            isDead = true;
+            
+        }
+        
+       }
     }
 
-}
+
