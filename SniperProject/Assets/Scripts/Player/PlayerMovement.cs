@@ -12,10 +12,10 @@ public class PlayerMovement : MonoBehaviour {
     Vector3 movement = Vector3.zero;
     Vector3 rotation = Vector3.zero;
 
-    float moveSpeed = .1f;
+    float moveSpeed = .50f;
     float rotateSpeed = 100f;
 
-    float sprintMultiplier = 3.50f;
+    float sprintMultiplier = 4.50f;
     float crouchSpeedMultiplier = .5f;
     float proneSpeedMultiplier = .1f;
 
